@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layout_sub">
+
+        <EditText
+            android:layout_width="40dp"
+            android:layout_height="78dp"
+            android:id="@+id/sets"
+            android:inputType="number"
+            android:layout_alignParentTop="true" />
+
+        <EditText
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/minWorkTime"
+            android:layout_below="@+id/sets"
+            android:layout_marginTop="111dp" />
+
+    <EditText
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/secWorkTime"
+        android:layout_alignBottom="@+id/minWorkTime"
+        android:layout_toRightOf="@+id/minWorkTime"
+        android:layout_toEndOf="@+id/minWorkTime" />
+
+    <EditText
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/minRestTime"
+        android:layout_below="@+id/minWorkTime"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="59dp" />
+
+    <EditText
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/secRestTime"
+        android:layout_alignTop="@+id/minRestTime"
+        android:layout_toRightOf="@+id/minRestTime"
+        android:layout_toEndOf="@+id/minRestTime" />
+
+</RelativeLayout>

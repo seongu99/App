@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:weightSum="1"
+        android:id="@+id/setLayout"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="20dp">
+
+
+        <EditText
+            android:layout_width="40dp"
+            android:layout_height="90dp"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/setNumber"
+
+            android:text="0"
+            />
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="60dp"
+            android:layout_height="match_parent" >
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="+"
+                android:id="@+id/setPlusButton"
+                />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/setPlusButton"
+                android:text="-"
+                android:id="@+id/setMinusButton"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:weightSum="1"
+    android:id="@+id/workTimeLayout"
+
+    android:layout_below="@+id/setLayout"
+    android:layout_alignRight="@+id/setLayout"
+    android:layout_alignEnd="@+id/setLayout"
+        android:layout_marginTop="20dp">
+
+
+    <EditText
+        android:layout_width="40dp"
+        android:layout_height="90dp"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/workMinNumber"
+        android:text="0"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:id="@+id/workTimeSeperator"
+        android:text="@string/separate"
+        android:singleLine="false" />
+    <EditText
+        android:layout_width="40dp"
+        android:layout_height="90dp"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/workSecNumber"
+
+        android:text="0"
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="60dp"
+        android:layout_height="match_parent" >
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="+"
+            android:id="@+id/workTimePlusButton"
+            />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/workTimePlusButton"
+            android:text="-"
+            android:id="@+id/workTimeMinusButton"
+            />
+    </LinearLayout>
+
+</LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:id="@+id/restTimeLayout"
+        android:layout_alignRight="@+id/setLayout"
+        android:layout_below="@+id/workTimeLayout"
+        android:layout_marginTop="20dp">
+
+
+        <EditText
+            android:layout_width="40dp"
+            android:layout_height="90dp"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/restMinNumber"
+
+            android:text="0"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:id="@+id/restTimeSeperator"
+            android:text="@string/separate"
+            android:singleLine="false" />
+        <EditText
+            android:layout_width="40dp"
+            android:layout_height="90dp"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/restSecNumber"
+
+            android:text="0"
+            />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="60dp"
+            android:layout_height="match_parent" >
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="+"
+                android:id="@+id/restTimePlusButton"
+                />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/workTimePlusButton"
+                android:text="-"
+                android:id="@+id/restTimeMinusButton" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/playButton"
+        android:layout_below="@+id/restTimeLayout"
+        android:layout_alignRight="@+id/setLayout"
+        android:src="@drawable/play"
+        android:padding="0sp"
+        android:adjustViewBounds = "true"
+        android:scaleType="fitXY"
+        android:maxHeight="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="bottom"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sets"
+        android:id="@+id/sets"
+
+        android:layout_toLeftOf="@+id/playButton"
+
+
+        android:layout_marginTop="40dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Work Interval"
+        android:id="@+id/workInterval"
+        android:layout_below="@+id/setLayout"
+        android:layout_alignRight="@+id/sets"
+        android:layout_alignEnd="@+id/sets"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rest Interval"
+        android:id="@+id/restInterval"
+        android:layout_below="@+id/workTimeLayout"
+        android:layout_toLeftOf="@+id/playButton"
+        android:layout_toStartOf="@+id/playButton"
+        android:layout_marginTop="20dp" />
+
+
+</RelativeLayout>
