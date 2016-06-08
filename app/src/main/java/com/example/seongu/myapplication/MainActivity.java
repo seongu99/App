@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         Button restTimePlusButton = (Button) findViewById(R.id.restTimePlusButton);
         Button restTimeMinusButton = (Button) findViewById(R.id.restTimeMinusButton);
 
-        setPlusButton.setOnClickListener(new View.OnClickListener(){
+        setPlusButton.setOnClickListener(new View.OnClickListener() {
 
 
             @Override
@@ -51,13 +51,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setMinusButton.setOnClickListener(new View.OnClickListener(){
+        setMinusButton.setOnClickListener(new View.OnClickListener() {
 
 
             @Override
             public void onClick(View v) {
                 setCount--;
-                if(setCount != -1) {
+                if (setCount != -1) {
                     setNumberView.setText(String.valueOf(setCount));
                 } else if (setCount == -1) {
                     setCount = 0;
@@ -67,11 +67,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        workTimePlusButton.setOnClickListener(new View.OnClickListener(){
+        workTimePlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 workSecCount++;
-                if(workSecCount != 60) {
+                if (workSecCount != 60) {
                     workSecNumberView.setText(String.valueOf(workSecCount));
                 } else if (workSecCount == 60) {
                     workSecCount = 0;
@@ -82,11 +82,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        workTimeMinusButton.setOnClickListener(new View.OnClickListener(){
+        workTimeMinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 workSecCount--;
-                if(workSecCount != -1){
+                if (workSecCount != -1) {
                     workSecNumberView.setText(String.valueOf(workSecCount));
                 } else if (workSecCount == -1 && workMinCount != 0) {
                     workMinCount--;
@@ -94,18 +94,18 @@ public class MainActivity extends AppCompatActivity {
 
                     workMinNumberView.setText(String.valueOf(workMinCount));
                     workSecNumberView.setText(String.valueOf(workSecCount));
-                } else if(workSecCount == -1 && workMinCount ==0){
+                } else if (workSecCount == -1 && workMinCount == 0) {
                     workSecCount = 0;
                     workSecNumberView.setText(String.valueOf(workSecCount));
                 }
             }
         });
 
-        restTimePlusButton.setOnClickListener(new View.OnClickListener(){
+        restTimePlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 restSecCount++;
-                if(restSecCount != 60) {
+                if (restSecCount != 60) {
                     restSecNumberView.setText(String.valueOf(restSecCount));
                 } else if (restSecCount == 60) {
                     restSecCount = 0;
@@ -116,11 +116,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        restTimeMinusButton.setOnClickListener(new View.OnClickListener(){
+        restTimeMinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 restSecCount--;
-                if(restSecCount != -1){
+                if (restSecCount != -1) {
                     restSecNumberView.setText(String.valueOf(restSecCount));
                 } else if (restSecCount == -1 && restMinCount != 0) {
                     restMinCount--;
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
                     restMinNumberView.setText(String.valueOf(restMinCount));
                     restSecNumberView.setText(String.valueOf(restSecCount));
-                } else if(restSecCount == -1 && restMinCount ==0){
+                } else if (restSecCount == -1 && restMinCount == 0) {
                     restSecCount = 0;
                     restSecNumberView.setText(String.valueOf(restSecCount));
                 }

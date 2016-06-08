@@ -9,28 +9,30 @@ import android.widget.EditText;
 
 public class playActivity extends AppCompatActivity {
 
+    EditText txtSets = (EditText) findViewById(R.id.sets);
+    EditText txtWorkMin = (EditText) findViewById(R.id.minWorkTime);
+    EditText txtWorkSec = (EditText) findViewById(R.id.secWorkTime);
+    EditText txtRestMin = (EditText) findViewById(R.id.minRestTime);
+    EditText txtRestSec = (EditText) findViewById(R.id.secRestTime);
+
     boolean finishFlag = true;
     ResponseHandler handler = new ResponseHandler();
+    Message message = handler.obtainMessage();
+    Bundle bundle = new Bundle();
 
     int remainingSets;
     int remainingWorkMinTime;
     int remainingWorkSecTime;
     int remainingRestMinTime;
     int remainingRestSecTime;
-
+    Data data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_sub);
 
         Intent intent = getIntent();
-        Data data = (Data)intent.getSerializableExtra("data");
-
-        EditText txtSets = (EditText) findViewById(R.id.sets);
-        EditText txtWorkMin = (EditText) findViewById(R.id.minWorkTime);
-        EditText txtWorkSec = (EditText) findViewById(R.id.secWorkTime);
-        EditText txtRestMin = (EditText) findViewById(R.id.minRestTime);
-        EditText txtRestSec = (EditText) findViewById(R.id.secRestTime);
+        data = (Data)intent.getSerializableExtra("data");
 
         txtSets.setText(String.valueOf(data.sets));
         txtWorkMin.setText(String.valueOf(data.workMinTime));
@@ -50,7 +52,11 @@ public class playActivity extends AppCompatActivity {
     }
 
     class RequestThread extends Thread {
+
+
         public void run(){
+
+
             while(finishFlag){
                 timeDecrease();
             }
@@ -62,15 +68,18 @@ public class playActivity extends AppCompatActivity {
             finishFlag = false;
 
         }
-        else if(remainingSets != 0 && remainingWorkMinTime != 0 && remainingWorkSecTime !=0){
+        else if(remainingWorkMinTime != 0 && remainingWorkSecTime !=0){
             try {
-                handler.sendEmptyMessage(remainingWorkSecTime--);
+                bundle.putString("workSecData", String.valueOf(data.workSecTime--));
+                message.setData(bundle);
+
+                handler.sendMessage(message);
                 Thread.sleep(1000);
             }catch (InterruptedException e){
 
             }
         }
-        else if(remainingSets != 0 && remainingWorkMinTime != 0 && remainingWorkSecTime ==0) {
+        else if(remainingWorkMinTime != 0 && remainingWorkSecTime ==0) {
             try{
 
                 handler.sendEmptyMessage(remainingWorkMinTime--);
@@ -80,7 +89,7 @@ public class playActivity extends AppCompatActivity {
 
             }
         }
-        else if (remainingSets != 0 && remainingWorkMinTime == 0 && remainingWorkSecTime ==0 && remainingWorkMinTime !=0 && remainingRestSecTime !=0) {
+        else if (remainingSets != 0 && remainingWorkMinTime == 0 && remainingWorkSecTime ==0 && remainingRestMinTime !=0 && remainingRestSecTime !=0) {
             try {
                 handler.sendEmptyMessage(remainingRestSecTime--);
                 Thread.sleep(1000);
@@ -89,7 +98,7 @@ public class playActivity extends AppCompatActivity {
 
             }
         }
-        else if(remainingSets != 0 && remainingWorkMinTime == 0 && remainingWorkSecTime ==0 && remainingWorkMinTime !=0 && remainingRestSecTime ==0) {
+        else if(remainingSets != 0 && remainingWorkMinTime == 0 && remainingWorkSecTime ==0 && remainingRestMinTime !=0 && remainingRestSecTime ==0) {
             try{
                 handler.sendEmptyMessage(remainingRestMinTime--);
                 handler.sendEmptyMessage(remainingRestSecTime = 59);
@@ -98,12 +107,31 @@ public class playActivity extends AppCompatActivity {
 
             }
         }
+        else if(remainingSets != 0 && remainingWorkMinTime == 0 && remainingWorkSecTime ==0 && remainingRestMinTime ==0 && remainingRestSecTime ==0) {
+
+            remainingWorkMinTime = data.workMinTime;
+            remainingWorkSecTime = data.workSecTime;
+            remainingRestMinTime = data.restMinTime;
+            remainingRestSecTime = data.restSecTime;
+
+            try {
+               handler.sendEmptyMessage(remainingSets--);
+               Thread.sleep(1000);
+               timeDecrease();
+           }catch (InterruptedException e){
+
+           }
+        }
+
     }
 
     class ResponseHandler extends Handler{
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
+            Bundle bundle = msg.getData();
+            String data = bundle.getString("workSecData");
+
+            txtWorkSec.setText(data);
         }
     }
 
