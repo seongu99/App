@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class playActivity extends AppCompatActivity {
 
@@ -57,7 +58,7 @@ public class playActivity extends AppCompatActivity {
 
         RequestThread thread = new RequestThread();
         thread.start();
-
+        Toast.makeText(this,"workout is finished", Toast.LENGTH_LONG).show();
     }
 
     class RequestThread extends Thread {
