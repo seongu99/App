@@ -5,44 +5,46 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class playActivity extends AppCompatActivity {
 
-    EditText txtSets = (EditText) findViewById(R.id.sets);
-    EditText txtWorkMin = (EditText) findViewById(R.id.minWorkTime);
-    EditText txtWorkSec = (EditText) findViewById(R.id.secWorkTime);
-    EditText txtRestMin = (EditText) findViewById(R.id.minRestTime);
-    EditText txtRestSec = (EditText) findViewById(R.id.secRestTime);
 
-    boolean finishFlag = true;
-    workTimeHandler1 workTimeHandler1 = new workTimeHandler1();
-    workTimeHandler2 workTimeHandler2 = new workTimeHandler2();
-    restTimeHandler1 restTimeHandler1 =new restTimeHandler1();
-    restTimeHandler1 restTimeHandler2 =new restTimeHandler1();
-    setTimeHandler1 setTimeHandler1 = new setTimeHandler1();
+    int remainingSets = 0;
+    int remainingWorkMinTime = 0;
+    int remainingWorkSecTime = 0;
+    int remainingRestMinTime = 0;
+    int remainingRestSecTime = 0;
 
-    //Message setTimeMessage;
-    Message workTimeMessage1;
-    Message workTimeMessage2;
-    //Message restTimeMessage1;
-    //Message restTimeMessage2;
 
-    int remainingSets;
-    int remainingWorkMinTime;
-    int remainingWorkSecTime;
-    int remainingRestMinTime;
-    int remainingRestSecTime;
-    Data data;
+    int initialWorkMinTime = 0;
+    int initialWorkSecTime = 0;
+    int initialRestMinTime = 0;
+    int initialRestSecTime = 0;
+
+    TextView txtSets;
+    TextView txtWorkMin;
+    TextView txtWorkSec;
+    TextView txtRestMin;
+    TextView txtRestSec;
+
+   // Intent intent = getIntent();
+    //Data data = (Data) intent.getSerializableExtra("data");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_sub);
 
-        Intent intent = getIntent();
-        data = (Data)intent.getSerializableExtra("data");
+       Intent intent = getIntent();
+       Data data = (Data) intent.getSerializableExtra("data");
+
+        txtSets = (TextView) findViewById(R.id.sets);
+        txtWorkMin = (TextView) findViewById(R.id.minWorkTime);
+        txtWorkSec = (TextView) findViewById(R.id.secWorkTime);
+        txtRestMin = (TextView) findViewById(R.id.minRestTime);
+        txtRestSec = (TextView) findViewById(R.id.secRestTime);
 
         txtSets.setText(String.valueOf(data.sets));
         txtWorkMin.setText(String.valueOf(data.workMinTime));
@@ -56,175 +58,104 @@ public class playActivity extends AppCompatActivity {
         remainingRestMinTime = data.restMinTime;
         remainingRestSecTime = data.restSecTime;
 
+        initialWorkMinTime = data.workMinTime;
+        initialWorkSecTime = data.workSecTime;
+        initialRestMinTime = data.restMinTime;
+        initialRestSecTime = data.restSecTime;
+
         RequestThread thread = new RequestThread();
         thread.start();
-        Toast.makeText(this,"workout is finished", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "workout is finished", Toast.LENGTH_LONG).show();
     }
 
     class RequestThread extends Thread {
+        public void run() {
+            while (true) {
+                if (remainingSets == 0 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0) {
+                    break;
+                } else if (remainingWorkMinTime != 0 && remainingWorkSecTime != 0) {
+                    remainingWorkSecTime--;
+                    handler.sendEmptyMessage(0);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+
+                    }
+                } else if (remainingWorkMinTime != 0 && remainingWorkSecTime == 0) {
+                    remainingWorkMinTime--;
+                    remainingWorkSecTime = 59;
+                    handler.sendEmptyMessage(1);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+
+                    }
+                } else if (remainingSets != 0 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && remainingRestMinTime != 0 && remainingRestSecTime != 0) {
+                    remainingRestSecTime--;
+                    handler.sendEmptyMessage(2);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+
+                    }
+                } else if (remainingSets != 0 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && remainingRestMinTime != 0 && remainingRestSecTime == 0) {
+                    remainingRestMinTime--;
+                    remainingRestSecTime = 59;
+                    handler.sendEmptyMessage(3);
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+
+                    }
+                } else if (remainingSets != 0 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && remainingRestMinTime == 0 && remainingRestSecTime == 0) {
+
+                    remainingWorkMinTime = initialWorkMinTime;
+                    remainingWorkSecTime = initialWorkSecTime;
+                    remainingRestMinTime = initialRestMinTime;
+                    remainingRestSecTime = initialRestSecTime;
+
+                    remainingSets--;
+                    handler.sendEmptyMessage(4);
+                    try {
+                        Thread.sleep(1000);
 
 
-        public void run(){
+                    } catch (InterruptedException e) {
 
-
-            while(finishFlag){
-                timeDecrease();
+                    }
+                }
             }
         }
-    }
 
-    private void timeDecrease() {
-        if(remainingSets == 0 && remainingWorkMinTime ==0 && remainingWorkSecTime ==0) {
-            finishFlag = false;
+        Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == 0) {
+                    txtWorkSec.setText(String.valueOf(remainingWorkSecTime));
+                } else if (msg.what == 1) {
+                    txtWorkMin.setText(String.valueOf(remainingWorkMinTime--));
+                    txtWorkSec.setText(String.valueOf(remainingWorkSecTime = 59));
+                } else if (msg.what == 2) {
+                    txtRestSec.setText(String.valueOf(remainingRestSecTime--));
 
-        }
-        else if(remainingWorkMinTime != 0 && remainingWorkSecTime !=0){
-            try {
-                Thread.sleep(1000);
-
-                workTimeMessage1 = workTimeHandler1.obtainMessage();
-                Bundle bundle = new Bundle();
-                bundle.putInt("workSecData", remainingWorkSecTime--);
-                workTimeMessage1.setData(bundle);
-
-                workTimeHandler1.sendMessage(workTimeMessage1);
-            }catch (InterruptedException e){
-
+                } else if (msg.what == 3) {
+                    txtRestMin.setText(String.valueOf(remainingRestMinTime--));
+                    txtRestSec.setText(String.valueOf(remainingRestSecTime = 59));
+                } else if (msg.what == 4) {
+                    txtSets.setText(String.valueOf(remainingSets--));
+                    txtWorkMin.setText(String.valueOf(remainingWorkMinTime));
+                    txtWorkSec.setText(String.valueOf(remainingWorkSecTime));
+                    txtRestMin.setText(String.valueOf(remainingRestMinTime));
+                    txtRestSec.setText(String.valueOf(remainingRestSecTime));
+                } else {
+                    Toast.makeText(playActivity.this, "Unexpected error occured", Toast.LENGTH_LONG).show();
+                }
             }
-        }
-        else if(remainingWorkMinTime != 0 && remainingWorkSecTime ==0) {
-            try{
-                Thread.sleep(1000);
-                workTimeMessage1 = workTimeHandler2.obtainMessage();
-                workTimeMessage2 = workTimeHandler2.obtainMessage();
+        };
 
-                Bundle bundle = new Bundle();
-                bundle.putInt("workMinData",remainingWorkMinTime--);
-                workTimeMessage1.setData(bundle);
-                workTimeHandler2.sendMessage(workTimeMessage1);
 
-                Bundle bundle2 = new Bundle();
-                bundle2.putInt("workSecData", remainingWorkSecTime = 59);
-                workTimeMessage2.setData(bundle2);
-                workTimeHandler2.sendMessage(workTimeMessage2);
-
-            }catch (InterruptedException e){
-
-            }
-        }
-        else if (remainingSets != 0 && remainingWorkMinTime == 0 && remainingWorkSecTime ==0 && remainingRestMinTime !=0 && remainingRestSecTime !=0) {
-            try {
-                Thread.sleep(1000);
-                workTimeMessage1 = restTimeHandler1.obtainMessage();
-                Bundle bundle = new Bundle();
-                bundle.putInt("restSecData", remainingRestSecTime--);
-                workTimeMessage1.setData(bundle);
-
-                restTimeHandler1.sendMessage(workTimeMessage1);
-
-            }catch (InterruptedException e) {
-
-            }
-        }
-        else if(remainingSets != 0 && remainingWorkMinTime == 0 && remainingWorkSecTime ==0 && remainingRestMinTime !=0 && remainingRestSecTime ==0) {
-            try{
-                Thread.sleep(1000);
-                workTimeMessage1 = restTimeHandler1.obtainMessage();
-                workTimeMessage2 = restTimeHandler2.obtainMessage();
-
-                Bundle bundle = new Bundle();
-                bundle.putInt("restMinData",remainingRestMinTime--);
-                workTimeMessage1.setData(bundle);
-                workTimeHandler2.sendMessage(workTimeMessage1);
-
-                Bundle bundle2 = new Bundle();
-                bundle2.putInt("restSecData", remainingRestSecTime = 59);
-                workTimeMessage2.setData(bundle2);
-                workTimeHandler2.sendMessage(workTimeMessage2);
-
-            }catch(InterruptedException e) {
-
-            }
-        }
-        else if(remainingSets != 0 && remainingWorkMinTime == 0 && remainingWorkSecTime ==0 && remainingRestMinTime ==0 && remainingRestSecTime ==0) {
-
-            remainingWorkMinTime = data.workMinTime;
-            remainingWorkSecTime = data.workSecTime;
-            remainingRestMinTime = data.restMinTime;
-            remainingRestSecTime = data.restSecTime;
-
-            try {
-                Thread.sleep(1000);
-                workTimeMessage1 = setTimeHandler1.obtainMessage();
-                Bundle bundle = new Bundle();
-                bundle.putInt("setsData", remainingSets--);
-                workTimeMessage1.setData(bundle);
-
-                setTimeHandler1.sendMessage(workTimeMessage1);
-
-                timeDecrease();
-           }catch (InterruptedException e){
-
-           }
-        }
-
-    }
-
-    class workTimeHandler1 extends Handler{
-        @Override
-        public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            int data = bundle.getInt("workSecData");
-
-            txtWorkSec.setText(data);
-        }
-    }
-
-    class workTimeHandler2 extends  Handler{
-        @Override
-        public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            int data = bundle.getInt("workMinData");
-            txtWorkMin.setText(data);
-
-            Bundle bundle2 = msg.getData();
-            int data2 = bundle.getInt("workSecData");
-            txtWorkSec.setText(data2);
-
-        }
-    }
-
-    class restTimeHandler1 extends Handler{
-        @Override
-        public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            int data = bundle.getInt("workSecData");
-
-            txtWorkSec.setText(data);
-        }
-    }
-
-    class restTimeHandler2 extends Handler{
-        @Override
-        public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            int data = bundle.getInt("workMinData");
-            txtWorkMin.setText(data);
-
-            Bundle bundle2 = msg.getData();
-            int data2 = bundle.getInt("workSecData");
-            txtWorkSec.setText(data2);
-
-        }
-    }
-
-    class setTimeHandler1 extends Handler{
-        @Override
-        public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            int data = bundle.getInt("setsData");
-
-            txtSets.setText(data);
-        }
     }
 }
+
+
