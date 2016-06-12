@@ -5,14 +5,14 @@
         android:layout_height="match_parent"
         android:id="@+id/layout_sub">
 
-        <EditText
+        <TextView
             android:layout_width="40dp"
             android:layout_height="78dp"
             android:id="@+id/sets"
             android:inputType="number"
             android:layout_alignParentTop="true" />
 
-        <EditText
+        <TextView
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:inputType="number"
@@ -21,7 +21,7 @@
             android:layout_below="@+id/sets"
             android:layout_marginTop="111dp" />
 
-    <EditText
+    <TextView
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:inputType="number"
@@ -31,7 +31,7 @@
         android:layout_toRightOf="@+id/minWorkTime"
         android:layout_toEndOf="@+id/minWorkTime" />
 
-    <EditText
+    <TextView
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:inputType="number"
@@ -42,7 +42,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="59dp" />
 
-    <EditText
+    <TextView
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:inputType="number"

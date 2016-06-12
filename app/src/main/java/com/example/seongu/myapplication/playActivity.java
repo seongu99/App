@@ -65,23 +65,25 @@ public class playActivity extends AppCompatActivity {
 
         RequestThread thread = new RequestThread();
         thread.start();
-        Toast.makeText(this, "workout is finished", Toast.LENGTH_LONG).show();
+
     }
 
     class RequestThread extends Thread {
         public void run() {
             while (true) {
-                if (remainingSets == 0 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0) {
+                if (remainingSets == 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0) {
+
                     break;
-                } else if (remainingWorkMinTime != 0 && remainingWorkSecTime != 0) {
+                } else if (remainingWorkMinTime >= 1&& remainingWorkSecTime != 0) {
                     remainingWorkSecTime--;
                     handler.sendEmptyMessage(0);
                     try {
                         Thread.sleep(1000);
+
                     } catch (InterruptedException e) {
 
                     }
-                } else if (remainingWorkMinTime != 0 && remainingWorkSecTime == 0) {
+                } else if (remainingWorkMinTime >1 && remainingWorkSecTime == 0) {
                     remainingWorkMinTime--;
                     remainingWorkSecTime = 59;
                     handler.sendEmptyMessage(1);
@@ -90,7 +92,7 @@ public class playActivity extends AppCompatActivity {
                     } catch (InterruptedException e) {
 
                     }
-                } else if (remainingSets != 0 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && remainingRestMinTime != 0 && remainingRestSecTime != 0) {
+                } else if (remainingSets >1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && (remainingRestMinTime != 0 || remainingRestMinTime == 0) && remainingRestSecTime != 0) {
                     remainingRestSecTime--;
                     handler.sendEmptyMessage(2);
                     try {
@@ -98,7 +100,7 @@ public class playActivity extends AppCompatActivity {
                     } catch (InterruptedException e) {
 
                     }
-                } else if (remainingSets != 0 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && remainingRestMinTime != 0 && remainingRestSecTime == 0) {
+                } else if (remainingSets > 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && remainingRestMinTime != 0 && remainingRestSecTime == 0) {
                     remainingRestMinTime--;
                     remainingRestSecTime = 59;
                     handler.sendEmptyMessage(3);
@@ -108,7 +110,7 @@ public class playActivity extends AppCompatActivity {
                     } catch (InterruptedException e) {
 
                     }
-                } else if (remainingSets != 0 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && remainingRestMinTime == 0 && remainingRestSecTime == 0) {
+                } else if (remainingSets > 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && remainingRestMinTime == 0 && remainingRestSecTime == 0) {
 
                     remainingWorkMinTime = initialWorkMinTime;
                     remainingWorkSecTime = initialWorkSecTime;
@@ -134,16 +136,15 @@ public class playActivity extends AppCompatActivity {
                 if (msg.what == 0) {
                     txtWorkSec.setText(String.valueOf(remainingWorkSecTime));
                 } else if (msg.what == 1) {
-                    txtWorkMin.setText(String.valueOf(remainingWorkMinTime--));
-                    txtWorkSec.setText(String.valueOf(remainingWorkSecTime = 59));
+                    txtWorkMin.setText(String.valueOf(remainingWorkMinTime));
+                    txtWorkSec.setText(String.valueOf(remainingWorkSecTime));
                 } else if (msg.what == 2) {
-                    txtRestSec.setText(String.valueOf(remainingRestSecTime--));
-
+                    txtRestSec.setText(String.valueOf(remainingRestSecTime));
                 } else if (msg.what == 3) {
-                    txtRestMin.setText(String.valueOf(remainingRestMinTime--));
-                    txtRestSec.setText(String.valueOf(remainingRestSecTime = 59));
+                    txtRestMin.setText(String.valueOf(remainingRestMinTime));
+                    txtRestSec.setText(String.valueOf(remainingRestSecTime));
                 } else if (msg.what == 4) {
-                    txtSets.setText(String.valueOf(remainingSets--));
+                    txtSets.setText(String.valueOf(remainingSets));
                     txtWorkMin.setText(String.valueOf(remainingWorkMinTime));
                     txtWorkSec.setText(String.valueOf(remainingWorkSecTime));
                     txtRestMin.setText(String.valueOf(remainingRestMinTime));

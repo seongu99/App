@@ -17,9 +17,9 @@ public class MainActivity extends AppCompatActivity {
     EditText restSecNumberView;
     ImageView playButton;
 
-    int setCount = 0;
+    int setCount = 1;
     int workMinCount = 0;
-    int workSecCount = 0;
+    int workSecCount = 1;
     int restMinCount = 0;
     int restSecCount = 0;
 
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+
                 setCount++;
                 setNumberView.setText(String.valueOf(setCount));
             }
@@ -56,11 +57,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                setCount--;
-                if (setCount != -1) {
-                    setNumberView.setText(String.valueOf(setCount));
-                } else if (setCount == -1) {
-                    setCount = 0;
+
+                if (setCount == 1) {
+                    ;
+                } else {
+                    setCount--;
                     setNumberView.setText(String.valueOf(setCount));
                 }
 
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 workSecCount--;
-                if (workSecCount != -1) {
+                if (workSecCount != 0) {
                     workSecNumberView.setText(String.valueOf(workSecCount));
                 } else if (workSecCount == -1 && workMinCount != 0) {
                     workMinCount--;
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                     workMinNumberView.setText(String.valueOf(workMinCount));
                     workSecNumberView.setText(String.valueOf(workSecCount));
                 } else if (workSecCount == -1 && workMinCount == 0) {
-                    workSecCount = 0;
+                    workSecCount = 1;
                     workSecNumberView.setText(String.valueOf(workSecCount));
                 }
             }

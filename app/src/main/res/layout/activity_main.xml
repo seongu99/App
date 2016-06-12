@@ -24,7 +24,7 @@
             android:ems="10"
             android:id="@+id/setNumber"
 
-            android:text="0"
+            android:text="1"
             />
 
 
@@ -89,7 +89,7 @@
         android:ems="10"
         android:id="@+id/workSecNumber"
 
-        android:text="0"
+        android:text="1"
         />
 
     <LinearLayout
@@ -223,7 +223,7 @@
         android:layout_below="@+id/workTimeLayout"
         android:layout_toLeftOf="@+id/playButton"
         android:layout_toStartOf="@+id/playButton"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="10dp" />
 
 
 </RelativeLayout>
