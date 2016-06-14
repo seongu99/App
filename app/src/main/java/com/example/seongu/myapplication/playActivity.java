@@ -17,7 +17,6 @@ public class playActivity extends AppCompatActivity {
     int remainingRestMinTime = 0;
     int remainingRestSecTime = 0;
 
-
     int initialWorkMinTime = 0;
     int initialWorkSecTime = 0;
     int initialRestMinTime = 0;
@@ -71,46 +70,78 @@ public class playActivity extends AppCompatActivity {
     class RequestThread extends Thread {
         public void run() {
             while (true) {
-                if (remainingSets == 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0) {
+                if (remainingSets == 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 1) {
+                    try{
+                        Thread.sleep(1000);
 
+
+                    }catch (InterruptedException e) {
+
+                    }
                     break;
-                } else if (remainingWorkMinTime >= 1&& remainingWorkSecTime != 0) {
-                    remainingWorkSecTime--;
-                    handler.sendEmptyMessage(0);
+                } else if ( remainingWorkMinTime == 0 && remainingWorkSecTime > 1) {
+
+
                     try {
                         Thread.sleep(1000);
+                        remainingWorkSecTime--;
+                        handler.sendEmptyMessage(0);
+                    } catch (InterruptedException e) {
+
+                    }
+
+                } else if ( remainingWorkMinTime != 0 && remainingWorkSecTime != 0 ) {
+
+
+                    try {
+                        Thread.sleep(1000);
+                        remainingWorkSecTime--;
+                        handler.sendEmptyMessage(0);
+                    } catch (InterruptedException e) {
+
+                    }
+                } else if (remainingWorkMinTime != 0 && remainingWorkSecTime == 0) {
+
+
+                    try {
+                        Thread.sleep(1000);
+                        remainingWorkMinTime--;
+                        remainingWorkSecTime = 59;
+                        handler.sendEmptyMessage(1);
+                    } catch (InterruptedException e) {
+
+                    }
+                } else if (remainingSets >1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 1 && remainingRestMinTime == 0 && remainingRestSecTime >= 1) {
+
+                    try {
+                        Thread.sleep(1000);
+                        remainingRestSecTime--;
+                        handler.sendEmptyMessage(2);
+                    } catch (InterruptedException e) {
+
+                    }
+
+                } else if (remainingSets >1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 1 && remainingRestMinTime != 0 && remainingRestSecTime >= 1) {
+
+                    try {
+                        Thread.sleep(1000);
+                        remainingRestSecTime--;
+                        handler.sendEmptyMessage(2);
+                    } catch (InterruptedException e) {
+
+                    }
+                } else if (remainingSets > 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 1 && remainingRestMinTime != 0 && remainingRestSecTime == 0) {
+
+                    try {
+                        Thread.sleep(1000);
+                        remainingRestMinTime--;
+                        remainingRestSecTime = 59;
+                        handler.sendEmptyMessage(3);
 
                     } catch (InterruptedException e) {
 
                     }
-                } else if (remainingWorkMinTime >1 && remainingWorkSecTime == 0) {
-                    remainingWorkMinTime--;
-                    remainingWorkSecTime = 59;
-                    handler.sendEmptyMessage(1);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-
-                    }
-                } else if (remainingSets >1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && (remainingRestMinTime != 0 || remainingRestMinTime == 0) && remainingRestSecTime != 0) {
-                    remainingRestSecTime--;
-                    handler.sendEmptyMessage(2);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-
-                    }
-                } else if (remainingSets > 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && remainingRestMinTime != 0 && remainingRestSecTime == 0) {
-                    remainingRestMinTime--;
-                    remainingRestSecTime = 59;
-                    handler.sendEmptyMessage(3);
-
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-
-                    }
-                } else if (remainingSets > 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && remainingRestMinTime == 0 && remainingRestSecTime == 0) {
+                } else if (remainingSets > 1 && remainingWorkMinTime == 0 &&  remainingWorkSecTime == 1 && remainingRestMinTime == 0 && remainingRestSecTime < 1) {
 
                     remainingWorkMinTime = initialWorkMinTime;
                     remainingWorkSecTime = initialWorkSecTime;
@@ -119,15 +150,10 @@ public class playActivity extends AppCompatActivity {
 
                     remainingSets--;
                     handler.sendEmptyMessage(4);
-                    try {
-                        Thread.sleep(1000);
 
-
-                    } catch (InterruptedException e) {
-
-                    }
                 }
             }
+
         }
 
         Handler handler = new Handler() {
@@ -157,6 +183,7 @@ public class playActivity extends AppCompatActivity {
 
 
     }
+
 }
 
 
