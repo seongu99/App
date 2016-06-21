@@ -152,6 +152,17 @@ public class playActivity extends AppCompatActivity {
                     handler.sendEmptyMessage(4);
 
                 }
+                else if (remainingSets > 1 && remainingWorkMinTime == 0 &&  remainingWorkSecTime == 1 && remainingRestMinTime == 0 && remainingRestSecTime == 0) {
+
+                    remainingWorkMinTime = initialWorkMinTime;
+                    remainingWorkSecTime = initialWorkSecTime;
+                    remainingRestMinTime = initialRestMinTime;
+                    remainingRestSecTime = initialRestSecTime;
+
+                    remainingSets--;
+                    handler.sendEmptyMessage(4);
+
+                }
             }
 
         }

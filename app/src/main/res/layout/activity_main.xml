@@ -20,12 +20,12 @@
         <EditText
             android:layout_width="40dp"
             android:layout_height="90dp"
-            android:inputType="number"
+            android:inputType="text"
             android:ems="10"
             android:id="@+id/setNumber"
 
             android:text="1"
-            />
+            android:nestedScrollingEnabled="true" />
 
 
         <LinearLayout
@@ -70,11 +70,10 @@
     <EditText
         android:layout_width="40dp"
         android:layout_height="90dp"
-        android:inputType="number"
         android:ems="10"
         android:id="@+id/workMinNumber"
         android:text="0"
-        />
+        android:inputType="text" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -85,7 +84,7 @@
     <EditText
         android:layout_width="40dp"
         android:layout_height="90dp"
-        android:inputType="number"
+        android:inputType="text"
         android:ems="10"
         android:id="@+id/workSecNumber"
 
@@ -132,7 +131,7 @@
         <EditText
             android:layout_width="40dp"
             android:layout_height="90dp"
-            android:inputType="number"
+            android:inputType="text"
             android:ems="10"
             android:id="@+id/restMinNumber"
 
@@ -148,7 +147,7 @@
         <EditText
             android:layout_width="40dp"
             android:layout_height="90dp"
-            android:inputType="number"
+            android:inputType="text"
             android:ems="10"
             android:id="@+id/restSecNumber"
 
@@ -186,13 +185,13 @@
         android:id="@+id/playButton"
         android:layout_below="@+id/restTimeLayout"
         android:layout_alignRight="@+id/setLayout"
-        android:src="@drawable/play"
         android:padding="0sp"
         android:adjustViewBounds = "true"
         android:scaleType="fitXY"
         android:maxHeight="60dp"
         android:layout_marginTop="10dp"
-        android:layout_gravity="bottom"/>
+        android:layout_gravity="bottom"
+        android:src="@drawable/play" />
 
     <TextView
         android:layout_width="wrap_content"
