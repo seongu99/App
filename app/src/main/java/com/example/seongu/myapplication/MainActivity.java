@@ -79,9 +79,9 @@ public class MainActivity extends AppCompatActivity {
                 workSecCount = Integer.parseInt(workSecNumberView.getText().toString());
                 workMinCount = Integer.parseInt(workMinNumberView.getText().toString());
                 workSecCount++;
-                if (Integer.parseInt(workSecNumberView.getText().toString()) != 60) {
+                if (workSecCount != 60) {
                     workSecNumberView.setText(String.valueOf(workSecCount));
-                } else if (Integer.parseInt(workSecNumberView.getText().toString()) == 60) {
+                } else if (workSecCount == 60) {
                     workSecCount = 0;
                     workMinCount++;
                     workMinNumberView.setText(String.valueOf(workMinCount));
@@ -96,15 +96,15 @@ public class MainActivity extends AppCompatActivity {
                 workSecCount = Integer.parseInt(workSecNumberView.getText().toString());
                 workMinCount = Integer.parseInt(workMinNumberView.getText().toString());
                 workSecCount--;
-                if (Integer.parseInt(workSecNumberView.getText().toString()) != 0) {
+                if (workSecCount != -1) {
                     workSecNumberView.setText(String.valueOf(workSecCount));
-                } else if (Integer.parseInt(workSecNumberView.getText().toString()) == -1 && Integer.parseInt(workMinNumberView.getText().toString()) != 0) {
+                } else if (workSecCount == -1 && workMinCount != 0) {
                     workMinCount--;
                     workSecCount = 59;
 
                     workMinNumberView.setText(String.valueOf(workMinCount));
                     workSecNumberView.setText(String.valueOf(workSecCount));
-                } else if (Integer.parseInt(workSecNumberView.getText().toString()) == -1 && Integer.parseInt(workMinNumberView.getText().toString()) == 0) {
+                } else if (workSecCount == 0 && workMinCount == 0) {
                     workSecCount = 1;
                     workSecNumberView.setText(String.valueOf(workSecCount));
                 }
@@ -117,9 +117,9 @@ public class MainActivity extends AppCompatActivity {
                 restSecCount = Integer.parseInt(restSecNumberView.getText().toString());
                 restMinCount = Integer.parseInt(restMinNumberView.getText().toString());
                 restSecCount++;
-                if (Integer.parseInt(restSecNumberView.getText().toString()) != 60) {
+                if (restSecCount != 60) {
                     restSecNumberView.setText(String.valueOf(restSecCount));
-                } else if (Integer.parseInt(restSecNumberView.getText().toString()) == 60) {
+                } else if (restSecCount == 60) {
                     restSecCount = 0;
                     restMinCount++;
                     restMinNumberView.setText(String.valueOf(restMinCount));
@@ -134,15 +134,15 @@ public class MainActivity extends AppCompatActivity {
                 restSecCount = Integer.parseInt(restSecNumberView.getText().toString());;
                 restMinCount = Integer.parseInt(restMinNumberView.getText().toString());
                 restSecCount--;
-                if (Integer.parseInt(restSecNumberView.getText().toString()) != -1) {
+                if (restSecCount != -1) {
                     restSecNumberView.setText(String.valueOf(restSecCount));
-                } else if (Integer.parseInt(restSecNumberView.getText().toString()) == -1 && Integer.parseInt(restMinNumberView.getText().toString()) != 0) {
+                } else if (restSecCount == -1 && restMinCount != 0) {
                     restMinCount--;
                     restSecCount = 59;
 
                     restMinNumberView.setText(String.valueOf(restMinCount));
                     restSecNumberView.setText(String.valueOf(restSecCount));
-                } else if (Integer.parseInt(restSecNumberView.getText().toString()) == -1 && Integer.parseInt(restMinNumberView.getText().toString()) == 0) {
+                } else if (restSecCount == -1 && restMinCount == 0) {
                     restSecCount = 0;
                     restSecNumberView.setText(String.valueOf(restSecCount));
                 }
