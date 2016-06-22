@@ -12,6 +12,14 @@ import android.widget.Toast;
 public class playActivity extends AppCompatActivity {
     View workTimeView, restTimeView;
 
+    private static final int MSG_WORK_SEC_CHANGED = 0;
+    private static final int MSG_WORK_MINSEC_CHANGED = 1;
+    private static final int MSG_REST_SEC_CHANGED = 2;
+    private static final int MSG_REST_MINSEC_CHANGED = 3;
+    private static final int MSG_SET_CHANGED = 4;
+    private static final int MSG_SEE_WORKVIEW = 5;
+    private static final int MSG_SEE_RESTVIEW = 6;
+    private static final int MSG_SETVIEW_CHANGED = 7;
     int remainingSets = 0;
     int remainingWorkMinTime = 0;
     int remainingWorkSecTime = 0;
@@ -66,20 +74,18 @@ public class playActivity extends AppCompatActivity {
         initialRestMinTime = data.restMinTime;
         initialRestSecTime = data.restSecTime;
 
-        RequestThread thread = new RequestThread();
+        TimerThread thread = new TimerThread();
         thread.start();
 
     }
 
-    class RequestThread extends Thread {
+    class TimerThread extends Thread {
         public void run() {
-            workTimeView.setVisibility(View.VISIBLE);
-            restTimeView.setVisibility(View.INVISIBLE);
+            handler.sendEmptyMessage(MSG_SEE_WORKVIEW);
             while (true) {
                 if (remainingSets == 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 1) {
                     if(workTimeView.getVisibility() == View.INVISIBLE){
-                        workTimeView.setVisibility(View.VISIBLE);
-                        restTimeView.setVisibility(View.INVISIBLE);
+                        handler.sendEmptyMessage(MSG_SEE_WORKVIEW);
                     }
 
                     try{
@@ -90,45 +96,58 @@ public class playActivity extends AppCompatActivity {
 
                     }
                     break;
-                } else if (remainingWorkMinTime == 0 && remainingWorkSecTime != 1) {
+                } else if (remainingWorkMinTime == 0 && remainingWorkSecTime >=2) {
                     if(workTimeView.getVisibility() == View.INVISIBLE){
-                        workTimeView.setVisibility(View.VISIBLE);
-                        restTimeView.setVisibility(View.INVISIBLE);
+                        handler.sendEmptyMessage(MSG_SEE_WORKVIEW);
                     }
 
                     try {
-                        remainingWorkSecTime--;
                         Thread.sleep(1000);
+                        remainingWorkSecTime--;
 
-                        handler.sendEmptyMessage(0);
+
+                        handler.sendEmptyMessage(MSG_WORK_SEC_CHANGED);
                     } catch (InterruptedException e) {
 
                     }
 
+
                 } else if ( remainingWorkMinTime != 0 && remainingWorkSecTime != 0 ) {
                     if(workTimeView.getVisibility() == View.INVISIBLE){
-                        workTimeView.setVisibility(View.VISIBLE);
-                        restTimeView.setVisibility(View.INVISIBLE);
+                        handler.sendEmptyMessage(MSG_SEE_WORKVIEW);
                     }
 
                     try {
                         Thread.sleep(1000);
                         remainingWorkSecTime--;
-                        handler.sendEmptyMessage(0);
+                        handler.sendEmptyMessage(MSG_WORK_SEC_CHANGED);
                     } catch (InterruptedException e) {
 
                     }
                 }
                 else if (remainingSets !=1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 1 && remainingRestMinTime == 0 && remainingRestSecTime == 1) {//check
                     if(workTimeView.getVisibility() == View.INVISIBLE){
-                        workTimeView.setVisibility(View.VISIBLE);
-                        restTimeView.setVisibility(View.INVISIBLE);
+                        try {
+                            Thread.sleep(1000);
+                            remainingWorkMinTime = initialWorkMinTime;
+                            remainingWorkSecTime = initialWorkSecTime;
+                            remainingRestMinTime = initialRestMinTime;
+                            remainingRestSecTime = initialRestSecTime;
+                            remainingSets--;
+
+                            handler.sendEmptyMessage(MSG_SET_CHANGED);
+                            handler.sendEmptyMessage(MSG_SEE_WORKVIEW);
+
+                        } catch (InterruptedException e) {
+                        }
+                        continue;
                     }
+
                     try {
                         Thread.sleep(1000);
                         remainingWorkSecTime--;
-                        workTimeView.setVisibility(View.INVISIBLE);
-                        restTimeView.setVisibility(View.VISIBLE);
+
+                        handler.sendEmptyMessage(MSG_SEE_RESTVIEW);
                         Thread.sleep(1000);
                         remainingRestSecTime--;
 
@@ -139,60 +158,83 @@ public class playActivity extends AppCompatActivity {
                 }
                 else if (remainingWorkMinTime != 0 && remainingWorkSecTime == 0) {
                     if(workTimeView.getVisibility() == View.INVISIBLE){
-                        workTimeView.setVisibility(View.VISIBLE);
-                        restTimeView.setVisibility(View.INVISIBLE);
+                        handler.sendEmptyMessage(MSG_SEE_WORKVIEW);
                     }
 
                     try {
                         Thread.sleep(1000);
                         remainingWorkMinTime--;
                         remainingWorkSecTime = 59;
-                        handler.sendEmptyMessage(1);
+                        handler.sendEmptyMessage(MSG_WORK_MINSEC_CHANGED);
                     } catch (InterruptedException e) {
 
                     }
                 }else if (remainingSets != 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 1 && remainingRestMinTime == 0 && remainingRestSecTime !=0) {//check
                     if(workTimeView.getVisibility() == View.INVISIBLE){
-                        viewHandler.sendEmptyMessage(0);
+                        handler.sendEmptyMessage(MSG_SEE_WORKVIEW);
 
                     }
                     try {
-                        viewHandler.sendEmptyMessage(1);
+                        Thread.sleep(1000);
+                        remainingWorkSecTime--;
+                        handler.sendEmptyMessage(MSG_SEE_RESTVIEW);
 
                         Thread.sleep(1000);
                         remainingRestSecTime--;
-                        handler.sendEmptyMessage(2);
+                        handler.sendEmptyMessage(MSG_REST_SEC_CHANGED);
                     } catch (InterruptedException e) {
 
                     }
                 }
-                else if (remainingSets != 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 1 && remainingRestMinTime != 0 && remainingRestSecTime !=0) {//check
+                else if (remainingSets != 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && remainingRestMinTime == 0 && remainingRestSecTime !=1) {//check
+                    if(workTimeView.getVisibility() == View.VISIBLE){
+                        handler.sendEmptyMessage(MSG_SEE_RESTVIEW);
+                    }
+                    try {
+
+                        Thread.sleep(1000);
+                        remainingRestSecTime--;
+                        handler.sendEmptyMessage(MSG_REST_SEC_CHANGED);
+                    } catch (InterruptedException e) {
+
+                    }
+                }
+                else if (remainingSets != 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && remainingRestMinTime != 0 && remainingRestSecTime !=0) {//check
+                    if(workTimeView.getVisibility() == View.VISIBLE){
+                        handler.sendEmptyMessage(MSG_SEE_RESTVIEW);
+                    }
+                    try {
+
+                        Thread.sleep(1000);
+                        remainingRestSecTime--;
+                        handler.sendEmptyMessage(MSG_REST_SEC_CHANGED);
+                    } catch (InterruptedException e) {
+
+                    }
+                }  else if (remainingSets != 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 1 && remainingRestMinTime != 0 && remainingRestSecTime !=0) {//check
                     if(workTimeView.getVisibility() == View.INVISIBLE){
-                        workTimeView.setVisibility(View.VISIBLE);
-                        restTimeView.setVisibility(View.INVISIBLE);
+                        handler.sendEmptyMessage(MSG_SEE_WORKVIEW);
                     }
                     try {
                         Thread.sleep(1000);
                         remainingWorkSecTime--;
 
-                        workTimeView.setVisibility(View.INVISIBLE);
-                        restTimeView.setVisibility(View.VISIBLE);
+                        handler.sendEmptyMessage(MSG_SEE_RESTVIEW);
                         Thread.sleep(1000);
                         remainingRestSecTime--;
-                        handler.sendEmptyMessage(2);
+                        handler.sendEmptyMessage(MSG_REST_SEC_CHANGED);
                     } catch (InterruptedException e) {
 
                     }
-                } else if (remainingSets != 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && remainingRestMinTime != 0 && remainingRestSecTime == 0) {//check
+                }else if (remainingSets != 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && remainingRestMinTime != 0 && remainingRestSecTime == 0) {//check
                     if(workTimeView.getVisibility() == View.VISIBLE){
-                        workTimeView.setVisibility(View.INVISIBLE);
-                        restTimeView.setVisibility(View.VISIBLE);
+                        handler.sendEmptyMessage(MSG_SEE_RESTVIEW);
                     }
                     try {
                         Thread.sleep(1000);
                         remainingRestMinTime--;
                         remainingRestSecTime = 59;
-                        handler.sendEmptyMessage(3);
+                        handler.sendEmptyMessage(MSG_REST_MINSEC_CHANGED);
 
                     } catch (InterruptedException e) {
 
@@ -206,15 +248,15 @@ public class playActivity extends AppCompatActivity {
                     remainingRestSecTime = initialRestSecTime;
                     try {
 
-                        remainingSets--;
                         Thread.sleep(1000);
-                        handler.sendEmptyMessage(4);
+                        remainingSets--;
+
+                        handler.sendEmptyMessage(MSG_SET_CHANGED);
                     }catch(InterruptedException e){
 
                     }
                 }
-
-                else if (remainingSets != 1 && remainingWorkMinTime == 0 &&  remainingWorkSecTime == 0 && remainingRestMinTime == 0 && remainingRestSecTime == 0) {//check
+                else if (remainingSets != 1 && remainingWorkMinTime == 0 &&  remainingWorkSecTime == 0 && remainingRestMinTime == 0 && remainingRestSecTime == 1) {//check
 
                     remainingWorkMinTime = initialWorkMinTime;
                     remainingWorkSecTime = initialWorkSecTime;
@@ -222,46 +264,65 @@ public class playActivity extends AppCompatActivity {
                     remainingRestSecTime = initialRestSecTime;
 
                     remainingSets--;
-                    handler.sendEmptyMessage(4);
+                   try{
+                       Thread.sleep(1000);
+                   }catch (InterruptedException e){
+
+                   }
+                    handler.sendEmptyMessage(MSG_SETVIEW_CHANGED);
 
                 }
+
 
             }
 
         }
-        Handler viewHandler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                if (msg.what == 0) {
-                    workTimeView.setVisibility(View.VISIBLE);
-                    restTimeView.setVisibility(View.INVISIBLE);
-                }else if(msg.what == 1){
-                    workTimeView.setVisibility(View.INVISIBLE);
-                    restTimeView.setVisibility(View.VISIBLE);
-                }
-            }
-        };
+
         Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                if (msg.what == 0) {
-                    txtWorkSec.setText(String.valueOf(remainingWorkSecTime));
-                } else if (msg.what == 1) {
-                    txtWorkMin.setText(String.valueOf(remainingWorkMinTime));
-                    txtWorkSec.setText(String.valueOf(remainingWorkSecTime));
-                } else if (msg.what == 2) {
-                    txtRestSec.setText(String.valueOf(remainingRestSecTime));
-                } else if (msg.what == 3) {
-                    txtRestMin.setText(String.valueOf(remainingRestMinTime));
-                    txtRestSec.setText(String.valueOf(remainingRestSecTime));
-                } else if (msg.what == 4) {
-                    txtSets.setText(String.valueOf(remainingSets));
-                    txtWorkMin.setText(String.valueOf(remainingWorkMinTime));
-                    txtWorkSec.setText(String.valueOf(remainingWorkSecTime));
-                    txtRestMin.setText(String.valueOf(remainingRestMinTime));
-                    txtRestSec.setText(String.valueOf(remainingRestSecTime));
-                } else {
-                    Toast.makeText(playActivity.this, "Unexpected error occured", Toast.LENGTH_LONG).show();
+                switch (msg.what){
+                    case MSG_WORK_SEC_CHANGED:
+                        txtWorkSec.setText(String.valueOf(remainingWorkSecTime));
+                        break;
+                    case MSG_WORK_MINSEC_CHANGED:
+                        txtWorkMin.setText(String.valueOf(remainingWorkMinTime));
+                        txtWorkSec.setText(String.valueOf(remainingWorkSecTime));
+                        break;
+                    case MSG_REST_SEC_CHANGED:
+                        txtRestSec.setText(String.valueOf(remainingRestSecTime));
+                        break;
+                    case MSG_REST_MINSEC_CHANGED:
+                        txtRestMin.setText(String.valueOf(remainingRestMinTime));
+                        txtRestSec.setText(String.valueOf(remainingRestSecTime));
+                        break;
+                    case MSG_SET_CHANGED:
+                        txtSets.setText(String.valueOf(remainingSets));
+                        txtWorkMin.setText(String.valueOf(remainingWorkMinTime));
+                        txtWorkSec.setText(String.valueOf(remainingWorkSecTime));
+                        txtRestMin.setText(String.valueOf(remainingRestMinTime));
+                        txtRestSec.setText(String.valueOf(remainingRestSecTime));
+                        break;
+                    case MSG_SEE_WORKVIEW:
+                        workTimeView.setVisibility(View.VISIBLE);
+                        restTimeView.setVisibility(View.INVISIBLE);
+                        break;
+                    case MSG_SEE_RESTVIEW:
+                        workTimeView.setVisibility(View.INVISIBLE);
+                        restTimeView.setVisibility(View.VISIBLE);
+                        break;
+                    case MSG_SETVIEW_CHANGED:
+                        workTimeView.setVisibility(View.VISIBLE);
+                        restTimeView.setVisibility(View.INVISIBLE);
+                        txtSets.setText(String.valueOf(remainingSets));
+                        txtWorkMin.setText(String.valueOf(remainingWorkMinTime));
+                        txtWorkSec.setText(String.valueOf(remainingWorkSecTime));
+                        txtRestMin.setText(String.valueOf(remainingRestMinTime));
+                        txtRestSec.setText(String.valueOf(remainingRestSecTime));
+                        break;
+                    default:
+                        Toast.makeText(playActivity.this, "Unexpected error occured", Toast.LENGTH_LONG).show();
+                        break;
                 }
             }
         };
