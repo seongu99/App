@@ -5,11 +5,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class playActivity extends AppCompatActivity {
-
+    View workTimeView, restTimeView;
 
     int remainingSets = 0;
     int remainingWorkMinTime = 0;
@@ -35,6 +36,9 @@ public class playActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_sub);
+
+        workTimeView = findViewById(R.id.workTimeView);
+        restTimeView = findViewById(R.id.restTimeView);
 
        Intent intent = getIntent();
        Data data = (Data) intent.getSerializableExtra("data");
@@ -69,8 +73,15 @@ public class playActivity extends AppCompatActivity {
 
     class RequestThread extends Thread {
         public void run() {
+            workTimeView.setVisibility(View.VISIBLE);
+            restTimeView.setVisibility(View.INVISIBLE);
             while (true) {
                 if (remainingSets == 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 1) {
+                    if(workTimeView.getVisibility() == View.INVISIBLE){
+                        workTimeView.setVisibility(View.VISIBLE);
+                        restTimeView.setVisibility(View.INVISIBLE);
+                    }
+
                     try{
                         Thread.sleep(1000);
 
@@ -79,19 +90,26 @@ public class playActivity extends AppCompatActivity {
 
                     }
                     break;
-                } else if ( remainingWorkMinTime == 0 && remainingWorkSecTime > 1) {
-
+                } else if (remainingWorkMinTime == 0 && remainingWorkSecTime != 1) {
+                    if(workTimeView.getVisibility() == View.INVISIBLE){
+                        workTimeView.setVisibility(View.VISIBLE);
+                        restTimeView.setVisibility(View.INVISIBLE);
+                    }
 
                     try {
-                        Thread.sleep(1000);
                         remainingWorkSecTime--;
+                        Thread.sleep(1000);
+
                         handler.sendEmptyMessage(0);
                     } catch (InterruptedException e) {
 
                     }
 
                 } else if ( remainingWorkMinTime != 0 && remainingWorkSecTime != 0 ) {
-
+                    if(workTimeView.getVisibility() == View.INVISIBLE){
+                        workTimeView.setVisibility(View.VISIBLE);
+                        restTimeView.setVisibility(View.INVISIBLE);
+                    }
 
                     try {
                         Thread.sleep(1000);
@@ -100,8 +118,30 @@ public class playActivity extends AppCompatActivity {
                     } catch (InterruptedException e) {
 
                     }
-                } else if (remainingWorkMinTime != 0 && remainingWorkSecTime == 0) {
+                }
+                else if (remainingSets !=1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 1 && remainingRestMinTime == 0 && remainingRestSecTime == 1) {//check
+                    if(workTimeView.getVisibility() == View.INVISIBLE){
+                        workTimeView.setVisibility(View.VISIBLE);
+                        restTimeView.setVisibility(View.INVISIBLE);
+                    }
+                    try {
+                        Thread.sleep(1000);
+                        remainingWorkSecTime--;
+                        workTimeView.setVisibility(View.INVISIBLE);
+                        restTimeView.setVisibility(View.VISIBLE);
+                        Thread.sleep(1000);
+                        remainingRestSecTime--;
 
+                    } catch (InterruptedException e) {
+
+                    }
+
+                }
+                else if (remainingWorkMinTime != 0 && remainingWorkSecTime == 0) {
+                    if(workTimeView.getVisibility() == View.INVISIBLE){
+                        workTimeView.setVisibility(View.VISIBLE);
+                        restTimeView.setVisibility(View.INVISIBLE);
+                    }
 
                     try {
                         Thread.sleep(1000);
@@ -111,27 +151,43 @@ public class playActivity extends AppCompatActivity {
                     } catch (InterruptedException e) {
 
                     }
-                } else if (remainingSets >1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 1 && remainingRestMinTime == 0 && remainingRestSecTime >= 1) {
+                }else if (remainingSets != 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 1 && remainingRestMinTime == 0 && remainingRestSecTime !=0) {//check
+                    if(workTimeView.getVisibility() == View.INVISIBLE){
+                        viewHandler.sendEmptyMessage(0);
 
+                    }
                     try {
+                        viewHandler.sendEmptyMessage(1);
+
                         Thread.sleep(1000);
                         remainingRestSecTime--;
                         handler.sendEmptyMessage(2);
                     } catch (InterruptedException e) {
 
                     }
-
-                } else if (remainingSets >1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 1 && remainingRestMinTime != 0 && remainingRestSecTime >= 1) {
-
+                }
+                else if (remainingSets != 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 1 && remainingRestMinTime != 0 && remainingRestSecTime !=0) {//check
+                    if(workTimeView.getVisibility() == View.INVISIBLE){
+                        workTimeView.setVisibility(View.VISIBLE);
+                        restTimeView.setVisibility(View.INVISIBLE);
+                    }
                     try {
+                        Thread.sleep(1000);
+                        remainingWorkSecTime--;
+
+                        workTimeView.setVisibility(View.INVISIBLE);
+                        restTimeView.setVisibility(View.VISIBLE);
                         Thread.sleep(1000);
                         remainingRestSecTime--;
                         handler.sendEmptyMessage(2);
                     } catch (InterruptedException e) {
 
                     }
-                } else if (remainingSets > 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 1 && remainingRestMinTime != 0 && remainingRestSecTime == 0) {
-
+                } else if (remainingSets != 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && remainingRestMinTime != 0 && remainingRestSecTime == 0) {//check
+                    if(workTimeView.getVisibility() == View.VISIBLE){
+                        workTimeView.setVisibility(View.INVISIBLE);
+                        restTimeView.setVisibility(View.VISIBLE);
+                    }
                     try {
                         Thread.sleep(1000);
                         remainingRestMinTime--;
@@ -141,7 +197,24 @@ public class playActivity extends AppCompatActivity {
                     } catch (InterruptedException e) {
 
                     }
-                } else if (remainingSets > 1 && remainingWorkMinTime == 0 &&  remainingWorkSecTime == 1 && remainingRestMinTime == 0 && remainingRestSecTime < 1) {
+                }
+                else if (remainingSets != 1 && remainingWorkMinTime == 0 &&  remainingWorkSecTime == 1 && remainingRestMinTime == 0 && remainingRestSecTime == 0) {//check
+
+                    remainingWorkMinTime = initialWorkMinTime;
+                    remainingWorkSecTime = initialWorkSecTime;
+                    remainingRestMinTime = initialRestMinTime;
+                    remainingRestSecTime = initialRestSecTime;
+                    try {
+
+                        remainingSets--;
+                        Thread.sleep(1000);
+                        handler.sendEmptyMessage(4);
+                    }catch(InterruptedException e){
+
+                    }
+                }
+
+                else if (remainingSets != 1 && remainingWorkMinTime == 0 &&  remainingWorkSecTime == 0 && remainingRestMinTime == 0 && remainingRestSecTime == 0) {//check
 
                     remainingWorkMinTime = initialWorkMinTime;
                     remainingWorkSecTime = initialWorkSecTime;
@@ -152,21 +225,22 @@ public class playActivity extends AppCompatActivity {
                     handler.sendEmptyMessage(4);
 
                 }
-                else if (remainingSets > 1 && remainingWorkMinTime == 0 &&  remainingWorkSecTime == 1 && remainingRestMinTime == 0 && remainingRestSecTime == 0) {
 
-                    remainingWorkMinTime = initialWorkMinTime;
-                    remainingWorkSecTime = initialWorkSecTime;
-                    remainingRestMinTime = initialRestMinTime;
-                    remainingRestSecTime = initialRestSecTime;
-
-                    remainingSets--;
-                    handler.sendEmptyMessage(4);
-
-                }
             }
 
         }
-
+        Handler viewHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == 0) {
+                    workTimeView.setVisibility(View.VISIBLE);
+                    restTimeView.setVisibility(View.INVISIBLE);
+                }else if(msg.what == 1){
+                    workTimeView.setVisibility(View.INVISIBLE);
+                    restTimeView.setVisibility(View.VISIBLE);
+                }
+            }
+        };
         Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {

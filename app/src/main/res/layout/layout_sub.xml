@@ -1,21 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/layout_sub">
 
-        <TextView
-            android:layout_width="40dp"
-            android:layout_height="78dp"
-            android:id="@+id/sets"
-            android:inputType="number"
-            android:layout_below="@+id/setView"
-            android:layout_centerHorizontal="true"
-            android:textSize="30dp"
-            android:textIsSelectable="false"
-            android:textColor="#000000" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sets"
+        android:id="@+id/setView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"
+        android:textColor="#000000" />
 
+     <TextView
+                android:layout_width="40dp"
+                android:layout_height="78dp"
+                android:id="@+id/sets"
+                android:inputType="number"
+                android:layout_below="@+id/setView"
+                android:layout_centerHorizontal="true"
+                android:textSize="30dp"
+                android:textIsSelectable="false"
+                android:textColor="#000000" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/workTimeView"
+        android:layout_below="@+id/sets"
+        android:layout_alignLeft="@+id/restTimeView"
+        android:layout_alignStart="@+id/restTimeView">
         <TextView
             android:layout_width="40dp"
             android:layout_height="wrap_content"
@@ -40,39 +57,8 @@
         android:textColor="#FF000000"
         android:textSize="30dp" />
 
-    <TextView
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/minRestTime"
-        android:textColor="#FF000000"
-        android:textSize="30dp"
-        android:layout_below="@+id/restView"
-        android:layout_toLeftOf="@+id/sets"
-        android:layout_toStartOf="@+id/sets" />
 
-    <TextView
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/secRestTime"
-        android:textColor="#FF000000"
-        android:textSize="30dp"
-        android:layout_below="@+id/restView"
-        android:layout_toRightOf="@+id/setView"
-        android:layout_toEndOf="@+id/setView" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sets"
-        android:id="@+id/setView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="20dp"
-        android:textColor="#000000" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -80,10 +66,7 @@
         android:text="Work Interval"
         android:id="@+id/workView"
         android:textSize="20dp"
-        android:textColor="#FF000000"
-        android:layout_below="@+id/sets"
-        android:layout_alignRight="@+id/restView"
-        android:layout_alignEnd="@+id/restView" />
+        android:textColor="#FF000000" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -94,7 +77,15 @@
         android:textSize="30dp"
         android:layout_below="@+id/workView"
         android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/restTimeView"
+        android:layout_below="@+id/workTimeView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="101dp">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -102,7 +93,7 @@
         android:id="@+id/restView"
         android:textColor="#FF000000"
         android:textSize="20dp"
-        android:layout_below="@+id/minWorkTime"
+
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp" />
 
@@ -115,17 +106,40 @@
         android:textSize="30dp"
         android:layout_below="@+id/restView"
         android:layout_centerHorizontal="true" />
+    <TextView
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/minRestTime"
+        android:textColor="#FF000000"
+        android:textSize="30dp"
+        android:layout_below="@+id/restView" />
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/secRestTime"
+            android:textColor="#FF000000"
+            android:textSize="30dp"
+            android:layout_below="@+id/restView"
+            android:layout_alignRight="@+id/restView"
+            android:layout_alignEnd="@+id/restView" />
+
+    </RelativeLayout>
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageButton"
-        android:layout_below="@+id/secRestTime"
-        android:layout_toRightOf="@+id/restView"
-        android:layout_marginTop="50dp"
-        android:src="@drawable/pause"
+            android:src="@drawable/pause"
         android:scaleType="fitXY"
         android:maxHeight="60dp"
-        android:adjustViewBounds="true" />
+        android:adjustViewBounds="true"
+        android:layout_below="@+id/restTimeView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
