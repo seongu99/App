@@ -112,7 +112,40 @@ public class playActivity extends AppCompatActivity {
                     }
 
 
-                } else if ( remainingWorkMinTime != 0 && remainingWorkSecTime != 0 ) {
+                }else if (remainingSets > 1 && remainingWorkMinTime == 0 &&  remainingWorkSecTime == 1 && remainingRestMinTime == 0 && remainingRestSecTime == 0) {//check
+
+                    remainingWorkMinTime = initialWorkMinTime;
+                    remainingWorkSecTime = initialWorkSecTime;
+                    remainingRestMinTime = initialRestMinTime;
+                    remainingRestSecTime = initialRestSecTime;
+                    try {
+
+                        Thread.sleep(1000);
+                        remainingSets--;
+
+                        handler.sendEmptyMessage(MSG_SET_CHANGED);
+                    }catch(InterruptedException e){
+
+                    }
+                }
+                else if (remainingSets !=1 && remainingWorkMinTime == 0 && remainingWorkSecTime != 1 && remainingRestMinTime == 0 && remainingRestSecTime == 1) {
+                    if(workTimeView.getVisibility() == View.INVISIBLE){
+                        handler.sendEmptyMessage(MSG_SEE_WORKVIEW);
+                    }
+
+                    try {
+                        Thread.sleep(1000);
+                        remainingWorkSecTime--;
+
+
+                        handler.sendEmptyMessage(MSG_WORK_SEC_CHANGED);
+                    } catch (InterruptedException e) {
+
+                    }
+
+
+                }
+                else if ( remainingWorkMinTime != 0 && remainingWorkSecTime != 0 ) {
                     if(workTimeView.getVisibility() == View.INVISIBLE){
                         handler.sendEmptyMessage(MSG_SEE_WORKVIEW);
                     }
@@ -140,7 +173,7 @@ public class playActivity extends AppCompatActivity {
 
                         } catch (InterruptedException e) {
                         }
-                        continue;
+
                     }
 
                     try {
@@ -186,7 +219,19 @@ public class playActivity extends AppCompatActivity {
 
                     }
                 }
-                else if (remainingSets != 1 && remainingWorkMinTime == 0 && remainingWorkSecTime == 0 && remainingRestMinTime == 0 && remainingRestSecTime !=1) {//check
+                else if (remainingSets != 1 && remainingWorkMinTime == 0 &&  remainingWorkSecTime == 0 && remainingRestMinTime == 0 && remainingRestSecTime == 0) {//check
+
+                    remainingWorkMinTime = initialWorkMinTime;
+                    remainingWorkSecTime = initialWorkSecTime;
+                    remainingRestMinTime = initialRestMinTime;
+                    remainingRestSecTime = initialRestSecTime;
+
+                    remainingSets--;
+
+                    handler.sendEmptyMessage(MSG_SETVIEW_CHANGED);
+
+                }
+                else if (remainingSets != 1 && remainingWorkMinTime == 0 && remainingWorkSecTime >= 0 && remainingRestMinTime == 0 && remainingRestSecTime !=0) {//check
                     if(workTimeView.getVisibility() == View.VISIBLE){
                         handler.sendEmptyMessage(MSG_SEE_RESTVIEW);
                     }
@@ -240,22 +285,7 @@ public class playActivity extends AppCompatActivity {
 
                     }
                 }
-                else if (remainingSets != 1 && remainingWorkMinTime == 0 &&  remainingWorkSecTime == 1 && remainingRestMinTime == 0 && remainingRestSecTime == 0) {//check
 
-                    remainingWorkMinTime = initialWorkMinTime;
-                    remainingWorkSecTime = initialWorkSecTime;
-                    remainingRestMinTime = initialRestMinTime;
-                    remainingRestSecTime = initialRestSecTime;
-                    try {
-
-                        Thread.sleep(1000);
-                        remainingSets--;
-
-                        handler.sendEmptyMessage(MSG_SET_CHANGED);
-                    }catch(InterruptedException e){
-
-                    }
-                }
                 else if (remainingSets != 1 && remainingWorkMinTime == 0 &&  remainingWorkSecTime == 0 && remainingRestMinTime == 0 && remainingRestSecTime == 1) {//check
 
                     remainingWorkMinTime = initialWorkMinTime;

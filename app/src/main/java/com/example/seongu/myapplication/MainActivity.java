@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -165,14 +166,21 @@ public class MainActivity extends AppCompatActivity {
                 int restMinTime = Integer.parseInt(restMinNumberView.getText().toString());
                 int restSecTime = Integer.parseInt(restSecNumberView.getText().toString());
 
+                if((Integer)sets == null) {
+                    Toast.makeText(MainActivity.this, "sets are null", Toast.LENGTH_LONG).show();
 
-                // Construct Data Object
-                Data data = new Data(sets, workMinTime, workSecTime, restMinTime, restSecTime);
+                }
+                else {
 
-                // Store Data Object in Intent
-                Intent intent = new Intent(MainActivity.this, playActivity.class);
-                intent.putExtra("data", data);
-                startActivity(intent);
+
+                    // Construct Data Object
+                    Data data = new Data(sets, workMinTime, workSecTime, restMinTime, restSecTime);
+
+                    // Store Data Object in Intent
+                    Intent intent = new Intent(MainActivity.this, playActivity.class);
+                    intent.putExtra("data", data);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -185,9 +193,16 @@ public class MainActivity extends AppCompatActivity {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
         }
         public void afterTextChanged(Editable s) {
-            try{
-                setCount = Integer.parseInt(String.valueOf(s));
-            }catch(NullPointerException e){
+            if(String.valueOf(s).matches("")) {
+                setCount = 10;
+            }
+            else {
+                try {
+                    setCount = Integer.parseInt(String.valueOf(s));
+
+
+                } catch (NullPointerException e) {
+                }
             }
         }
     }
