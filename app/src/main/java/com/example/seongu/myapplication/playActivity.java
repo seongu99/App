@@ -128,23 +128,7 @@ public class playActivity extends AppCompatActivity {
 
                     }
                 }
-                else if (remainingSets !=1 && remainingWorkMinTime == 0 && remainingWorkSecTime != 1 && remainingRestMinTime == 0 && remainingRestSecTime == 1) {
-                    if(workTimeView.getVisibility() == View.INVISIBLE){
-                        handler.sendEmptyMessage(MSG_SEE_WORKVIEW);
-                    }
 
-                    try {
-                        Thread.sleep(1000);
-                        remainingWorkSecTime--;
-
-
-                        handler.sendEmptyMessage(MSG_WORK_SEC_CHANGED);
-                    } catch (InterruptedException e) {
-
-                    }
-
-
-                }
                 else if ( remainingWorkMinTime != 0 && remainingWorkSecTime != 0 ) {
                     if(workTimeView.getVisibility() == View.INVISIBLE){
                         handler.sendEmptyMessage(MSG_SEE_WORKVIEW);
