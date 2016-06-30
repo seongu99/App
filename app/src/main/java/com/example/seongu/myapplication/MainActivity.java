@@ -96,17 +96,24 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 workSecCount = Integer.parseInt(workSecNumberView.getText().toString());
                 workMinCount = Integer.parseInt(workMinNumberView.getText().toString());
-                workSecCount--;
-                if (workSecCount != -1) {
+
+                if (workMinCount == 0 &&workSecCount == 1) {
+
+                }
+                else if (workMinCount ==0 && workSecCount >=2){
+                    workSecCount--;
                     workSecNumberView.setText(String.valueOf(workSecCount));
-                } else if (workSecCount == -1 && workMinCount != 0) {
+                }
+                else if(workMinCount !=0 && workSecCount >=1) {
+                    workSecCount--;
+                    workSecNumberView.setText(String.valueOf(workSecCount));
+                }
+
+                else if (workMinCount != 0 && workSecCount ==0) {
                     workMinCount--;
                     workSecCount = 59;
 
                     workMinNumberView.setText(String.valueOf(workMinCount));
-                    workSecNumberView.setText(String.valueOf(workSecCount));
-                } else if (workSecCount == 0 && workMinCount == 0) {
-                    workSecCount = 1;
                     workSecNumberView.setText(String.valueOf(workSecCount));
                 }
             }

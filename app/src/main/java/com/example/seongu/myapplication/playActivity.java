@@ -5,12 +5,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class playActivity extends AppCompatActivity {
-    View workTimeView, restTimeView;
+    PopupWindow pause;
+    RelativeLayout relative;
+    View workTimeView, restTimeView, pauseview;
 
     private static final int MSG_WORK_SEC_CHANGED = 0;
     private static final int MSG_WORK_MINSEC_CHANGED = 1;
@@ -20,6 +26,7 @@ public class playActivity extends AppCompatActivity {
     private static final int MSG_SEE_WORKVIEW = 5;
     private static final int MSG_SEE_RESTVIEW = 6;
     private static final int MSG_SETVIEW_CHANGED = 7;
+
     int remainingSets = 0;
     int remainingWorkMinTime = 0;
     int remainingWorkSecTime = 0;
@@ -44,6 +51,13 @@ public class playActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_sub);
+
+
+        relative = (RelativeLayout) findViewById(R.id.layout_sub); //Pause popup view
+        pauseview = View.inflate(this, R.layout.pauseview, null);
+        pause = new PopupWindow(pauseview,500,450,true);
+
+
 
         workTimeView = findViewById(R.id.workTimeView);
         restTimeView = findViewById(R.id.restTimeView);
@@ -74,8 +88,27 @@ public class playActivity extends AppCompatActivity {
         initialRestMinTime = data.restMinTime;
         initialRestSecTime = data.restSecTime;
 
+        final ImageView pauseBtn = (ImageView) findViewById(R.id.pauseButton);
+        pauseBtn.setOnClickListener(new ImageView.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                pause.showAtLocation(relative, Gravity.CENTER,0,0);
+            }
+        });
+
+        ImageView resumeBtn = (ImageView) pauseview.findViewById(R.id.resumeButton);
+        resumeBtn.setOnClickListener(new ImageView.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                pause.dismiss();
+            }
+        });
+
         TimerThread thread = new TimerThread();
         thread.start();
+
+
+
 
     }
 
@@ -94,6 +127,7 @@ public class playActivity extends AppCompatActivity {
                     if(remainingWorkMinTime == 0 && remainingWorkSecTime >=2) {
                         try{
                             Thread.sleep(1000);
+
                         }catch (InterruptedException e) {
 
                         }
@@ -188,7 +222,7 @@ public class playActivity extends AppCompatActivity {
                                     remainingRestSecTime = initialRestSecTime;
                                     remainingSets--;
 
-                                    handler.sendEmptyMessage(MSG_SET_CHANGED);
+                                    handler.sendEmptyMessage(MSG_SETVIEW_CHANGED);
                                     break;
                                 }
                                 else if(remainingRestMinTime == 0 && remainingRestSecTime >=2 ){
@@ -284,15 +318,15 @@ public class playActivity extends AppCompatActivity {
                         break;
                     case MSG_SEE_WORKVIEW:
                         workTimeView.setVisibility(View.VISIBLE);
-                        restTimeView.setVisibility(View.INVISIBLE);
+                        restTimeView.setVisibility(View.GONE);
                         break;
                     case MSG_SEE_RESTVIEW:
-                        workTimeView.setVisibility(View.INVISIBLE);
+                        workTimeView.setVisibility(View.GONE);
                         restTimeView.setVisibility(View.VISIBLE);
                         break;
                     case MSG_SETVIEW_CHANGED:
                         workTimeView.setVisibility(View.VISIBLE);
-                        restTimeView.setVisibility(View.INVISIBLE);
+                        restTimeView.setVisibility(View.GONE);
                         txtSets.setText(String.valueOf(remainingSets));
                         txtWorkMin.setText(String.valueOf(remainingWorkMinTime));
                         txtWorkSec.setText(String.valueOf(remainingWorkSecTime));
